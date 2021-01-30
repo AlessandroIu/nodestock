@@ -2,8 +2,17 @@ const express = require('express');
 const app = express();
 const exphbs = require('express-handlebars');
 const path = require('path');
+const request = require('request');
 
 const PORT = process.env.PORT || 5000;
+
+// API JEY pk_1de4171d5a5945ea8e3f07657c6a1132
+request('https://cloud.iexapis.com/stable/stock/fb/quote?token=pk_1de4171d5a5945ea8e3f07657c6a1132', { json: true }, (err, res, body) => {
+	if(err){return console.log(err);}
+	if (res.statusCode === 200){
+		console.log(body);
+	}
+})	;
 
 // Set Handlebars Middleware
 app.engine('handlebars', exphbs());
