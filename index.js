@@ -7,12 +7,15 @@ const request = require('request');
 const PORT = process.env.PORT || 5000;
 
 // API JEY pk_1de4171d5a5945ea8e3f07657c6a1132
-request('https://cloud.iexapis.com/stable/stock/fb/quote?token=pk_1de4171d5a5945ea8e3f07657c6a1132', { json: true }, (err, res, body) => {
-	if(err){return console.log(err);}
-	if (res.statusCode === 200){
-		console.log(body);
-	}
-})	;
+// Create call_api function
+function call_api (finishedAPI) {
+	request('https://cloud.iexapis.com/stable/stock/fb/quote?token=pk_1de4171d5a5945ea8e3f07657c6a1132', { json: true }, (err, res, body) => {
+		if(err){return console.log(err);}
+		if (res.statusCode === 200){
+			finishedAPI(body);
+		}
+	});
+};
 
 // Set Handlebars Middleware
 app.engine('handlebars', exphbs());
@@ -22,8 +25,10 @@ const otherstuff = "hello there, this is  other stuff!";
 
 // Set handlebar routes
 app.get('/', function (req, res){
-	res.render('home', {
-		stuff: otherstuff
+	call_api(function(doneAPI) {
+		res.render('home', {
+			stock: doneAPI
+		});		
 	});
 });
 
